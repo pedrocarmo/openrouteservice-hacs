@@ -11,7 +11,6 @@ A Home Assistant custom component that provides route planning services using [O
 - 🚗 **Service-only architecture** - No sensors, minimal API consumption
 - 📍 **Automatic address geocoding** - Use addresses directly, no need for coordinates
 - 🗺️ **Multiple transportation modes** - Driving, cycling, walking, wheelchair, and HGV
-- ⚡ **Route optimization** - Choose fastest, shortest, or recommended routes
 - 🤖 **Automation-friendly** - Returns comprehensive route data for use in automations
 - 🔄 **Zero polling** - Routes calculated only when you request them
 
@@ -89,7 +88,6 @@ Plan a route between two addresses.
 | `origin` | Yes | - | Starting address (automatically geocoded) |
 | `destination` | Yes | - | Destination address (automatically geocoded) |
 | `profile` | No | `driving-car` | Transportation mode |
-| `preference` | No | `fastest` | Route optimization preference |
 
 #### Transportation Modes (`profile`)
 
@@ -99,12 +97,6 @@ Plan a route between two addresses.
 - `foot-walking` - Pedestrian routing
 - `wheelchair` - Wheelchair-accessible routing
 
-#### Route Preferences (`preference`)
-
-- `fastest` - Minimize travel time
-- `shortest` - Minimize distance
-- `recommended` - Balanced route
-
 ### Basic Example
 
 ```yaml
@@ -113,7 +105,6 @@ data:
   origin: "Brandenburg Gate, Berlin"
   destination: "Berlin Hauptbahnhof"
   profile: "driving-car"
-  preference: "fastest"
 ```
 
 ### Automation Example
@@ -132,7 +123,6 @@ automation:
           origin: "{{ states('zone.home') }}"
           destination: "{{ states('zone.work') }}"
           profile: "driving-car"
-          preference: "fastest"
         response_variable: route
 
       - service: notify.mobile_app
@@ -153,7 +143,6 @@ data:
   origin: "Alexanderplatz, Berlin"
   destination: "Tiergarten, Berlin"
   profile: "cycling-regular"
-  preference: "recommended"
 ```
 
 ```yaml
@@ -163,7 +152,6 @@ data:
   origin: "Museum Island, Berlin"
   destination: "Brandenburg Gate, Berlin"
   profile: "foot-walking"
-  preference: "shortest"
 ```
 
 ### Response Data Structure
@@ -183,7 +171,6 @@ When using `response_variable`, the service returns:
   "distance": 2150.5,           # meters
   "duration": 420.3,            # seconds
   "profile": "driving-car",
-  "preference": "fastest",
   "geometry": {...},            # GeoJSON LineString
   "segments": [...]             # Turn-by-turn segments
 }
@@ -247,7 +234,7 @@ Since this integration uses a service-only approach (no background polling), you
 
 - Verify both addresses are valid and reachable
 - Check if transportation mode is appropriate (e.g., some areas may not have wheelchair-accessible routes)
-- Try different route preferences
+- Try a different transportation mode if the current one is not available for the route
 
 ### Rate limit errors
 

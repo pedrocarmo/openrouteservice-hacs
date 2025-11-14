@@ -170,11 +170,6 @@ if call.return_response:
 - `foot-walking` - Pedestrian routing
 - `wheelchair` - Wheelchair-accessible routing
 
-### Preferences
-- `fastest` - Minimize time (default)
-- `shortest` - Minimize distance
-- `recommended` - Balance of time and distance
-
 ## Phase Implementation Status
 
 ### Phase 1: Core Integration ✅ (Planned)
@@ -219,7 +214,6 @@ if call.return_response:
      origin: "Brandenburg Gate, Berlin"
      destination: "Berlin Hauptbahnhof"
      profile: "driving-car"
-     preference: "fastest"
    ```
 5. Verify response includes `distance`, `duration`, `geometry`
 6. Test in automation with `response_variable`

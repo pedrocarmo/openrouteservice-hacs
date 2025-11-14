@@ -14,12 +14,9 @@ from .api import CannotConnect, OpenRouteServiceAPI
 from .const import (
     ATTR_DESTINATION,
     ATTR_ORIGIN,
-    ATTR_PREFERENCE,
     ATTR_PROFILE,
-    DEFAULT_PREFERENCE,
     DEFAULT_PROFILE,
     DOMAIN,
-    PREFERENCES,
     PROFILES,
     SERVICE_PLAN_ROUTE,
 )
@@ -32,9 +29,6 @@ PLAN_ROUTE_SCHEMA = vol.Schema(
         vol.Required(ATTR_ORIGIN): cv.string,
         vol.Required(ATTR_DESTINATION): cv.string,
         vol.Optional(ATTR_PROFILE, default=DEFAULT_PROFILE): vol.In(PROFILES),
-        vol.Optional(ATTR_PREFERENCE, default=DEFAULT_PREFERENCE): vol.In(
-            PREFERENCES
-        ),
     }
 )
 
@@ -58,7 +52,6 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
             origin_address = call.data[ATTR_ORIGIN]
             destination_address = call.data[ATTR_DESTINATION]
             profile = call.data[ATTR_PROFILE]
-            preference = call.data[ATTR_PREFERENCE]
 
             # Get the first available API client (any entry)
             entry_data = next(iter(hass.data[DOMAIN].values()))
@@ -83,15 +76,14 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
                 # Step 3: Get directions
                 _LOGGER.info(
-                    "Calculating route from %s to %s (profile: %s, preference: %s)",
+                    "Calculating route from %s to %s (profile: %s)",
                     origin_coords,
                     dest_coords,
                     profile,
-                    preference,
                 )
                 try:
                     route = await api_client.get_directions(
-                        origin_coords, dest_coords, profile, preference
+                        origin_coords, dest_coords, profile
                     )
                 except ValueError as err:
                     raise HomeAssistantError(f"Route calculation failed: {err}") from err
@@ -112,7 +104,6 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
                         "geometry": route.get("geometry"),
                         "segments": route.get("segments", []),
                         "profile": profile,
-                        "preference": preference,
                     }
 
                 return None

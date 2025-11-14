@@ -12,11 +12,9 @@ SERVICE_PLAN_ROUTE = "plan_route"
 ATTR_ORIGIN = "origin"
 ATTR_DESTINATION = "destination"
 ATTR_PROFILE = "profile"
-ATTR_PREFERENCE = "preference"
 
 # Defaults
 DEFAULT_PROFILE = "driving-car"
-DEFAULT_PREFERENCE = "fastest"
 
 # Profiles
 PROFILES = [
@@ -25,13 +23,6 @@ PROFILES = [
     "cycling-regular",
     "foot-walking",
     "wheelchair",
-]
-
-# Preferences
-PREFERENCES = [
-    "fastest",
-    "shortest",
-    "recommended",
 ]
 
 # API

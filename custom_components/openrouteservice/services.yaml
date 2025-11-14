@@ -28,16 +28,6 @@ plan_route:
             - "cycling-regular"
             - "foot-walking"
             - "wheelchair"
-    preference:
-      name: Route preference
-      description: Route optimization preference.
-      default: "fastest"
-      selector:
-        select:
-          options:
-            - "fastest"
-            - "shortest"
-            - "recommended"
   response:
     optional: true
     description: Route information including distance, duration, and geometry

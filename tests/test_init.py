@@ -140,7 +140,6 @@ async def test_service_plan_route_success(hass: HomeAssistant, mock_ors_client):
             "origin": "Berlin, Germany",
             "destination": "Munich, Germany",
             "profile": "driving-car",
-            "preference": "fastest",
         },
         blocking=True,
         return_response=True,
@@ -157,7 +156,7 @@ async def test_service_plan_route_success(hass: HomeAssistant, mock_ors_client):
 
 
 async def test_service_plan_route_with_defaults(hass: HomeAssistant, mock_ors_client):
-    """Test route planning with default profile and preference."""
+    """Test route planning with default profile."""
     entry = ConfigEntry(
         version=1,
         domain=DOMAIN,
@@ -184,7 +183,6 @@ async def test_service_plan_route_with_defaults(hass: HomeAssistant, mock_ors_cl
     # Verify response with defaults
     assert response is not None
     assert response["profile"] == "driving-car"
-    assert response["preference"] == "fastest"
 
 
 async def test_service_plan_route_geocoding_error(hass: HomeAssistant, mock_ors_client_no_features):
@@ -201,7 +199,7 @@ async def test_service_plan_route_geocoding_error(hass: HomeAssistant, mock_ors_
     await async_setup_entry(hass, entry)
 
     # Call the service with address that can't be geocoded
-    with pytest.raises(HomeAssistantError, match="Geocoding failed"):
+    with pytest.raises(HomeAssistantError, match="Failed to geocode origin"):
         await hass.services.async_call(
             DOMAIN,
             SERVICE_PLAN_ROUTE,

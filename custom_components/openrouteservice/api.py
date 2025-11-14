@@ -85,7 +85,6 @@ class OpenRouteServiceAPI:
         origin: tuple[float, float],
         destination: tuple[float, float],
         profile: str = "driving-car",
-        preference: str = "fastest",
     ) -> dict[str, Any]:
         """
         Get directions between two coordinates.
@@ -94,7 +93,6 @@ class OpenRouteServiceAPI:
             origin: (longitude, latitude) tuple
             destination: (longitude, latitude) tuple
             profile: Transportation mode
-            preference: Route optimization preference
 
         Returns:
             Route information with distance, duration, geometry, etc.
@@ -104,7 +102,6 @@ class OpenRouteServiceAPI:
                 self._directions_sync,
                 [origin, destination],
                 profile,
-                preference,
             )
 
             _LOGGER.debug("Directions API response keys: %s", result.keys())
@@ -133,22 +130,19 @@ class OpenRouteServiceAPI:
         self,
         coords: list[tuple[float, float]],
         profile: str,
-        preference: str,
     ) -> dict[str, Any]:
         """Synchronous directions helper."""
         # Convert tuples to lists for API compatibility
         coords_list = [[coord[0], coord[1]] for coord in coords]
         _LOGGER.debug(
-            "Requesting directions with coords: %s, profile: %s, preference: %s",
+            "Requesting directions with coords: %s, profile: %s",
             coords_list,
             profile,
-            preference,
         )
         return self._client.directions(
             coords_list,
             profile=profile,
             format="geojson",
-            preference=preference,
             units="m",
             geometry=True,
             instructions=True,

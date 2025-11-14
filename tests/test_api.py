@@ -72,7 +72,7 @@ async def test_get_directions_success(hass: HomeAssistant, mock_ors_client):
     origin = (13.388860, 52.517037)
     destination = (13.397634, 52.529407)
 
-    route = await api.get_directions(origin, destination, "driving-car", "fastest")
+    route = await api.get_directions(origin, destination, "driving-car")
 
     assert "summary" in route
     assert route["summary"]["distance"] == 5420.5
@@ -89,13 +89,12 @@ async def test_get_directions_with_different_profile(hass: HomeAssistant, mock_o
     origin = (13.388860, 52.517037)
     destination = (13.397634, 52.529407)
 
-    route = await api.get_directions(origin, destination, "foot-walking", "shortest")
+    route = await api.get_directions(origin, destination, "foot-walking")
 
     assert "summary" in route
     # Verify the profile was passed correctly
     call_args = mock_ors_client.directions.call_args
     assert call_args[1]["profile"] == "foot-walking"
-    assert call_args[1]["preference"] == "shortest"
 
 
 async def test_get_directions_no_route_found(hass: HomeAssistant):
