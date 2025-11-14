@@ -1,0 +1,21 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Connect to OpenRouteService",
+        "description": "Enter your OpenRouteService API key. Don't have one? Sign up at {signup_url}",
+        "data": {
+          "api_key": "API Key"
+        }
+      }
+    },
+    "error": {
+      "invalid_auth": "Invalid API key. Please check your key and try again.",
+      "cannot_connect": "Unable to connect to OpenRouteService API. Please check your internet connection and try again.",
+      "unknown": "Unexpected error occurred. Please try again."
+    },
+    "abort": {
+      "already_configured": "This API key is already configured."
+    }
+  }
+}

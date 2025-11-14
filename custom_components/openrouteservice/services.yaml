@@ -1,0 +1,43 @@
+plan_route:
+  name: Plan route
+  description: Plan a route between two addresses using OpenRouteService. Automatically geocodes addresses and returns route information.
+  fields:
+    origin:
+      name: Origin
+      description: Starting address (will be automatically geocoded).
+      required: true
+      example: "123 Main St, Berlin, Germany"
+      selector:
+        text:
+    destination:
+      name: Destination
+      description: Destination address (will be automatically geocoded).
+      required: true
+      example: "Alexanderplatz, Berlin, Germany"
+      selector:
+        text:
+    profile:
+      name: Travel mode
+      description: Transportation mode for routing.
+      default: "driving-car"
+      selector:
+        select:
+          options:
+            - "driving-car"
+            - "driving-hgv"
+            - "cycling-regular"
+            - "foot-walking"
+            - "wheelchair"
+    preference:
+      name: Route preference
+      description: Route optimization preference.
+      default: "fastest"
+      selector:
+        select:
+          options:
+            - "fastest"
+            - "shortest"
+            - "recommended"
+  response:
+    optional: true
+    description: Route information including distance, duration, and geometry
