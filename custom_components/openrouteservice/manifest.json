@@ -8,5 +8,5 @@
   "iot_class": "cloud_polling",
   "issue_tracker": "https://github.com/pedrocarmo/open-route-service-hacs/issues",
   "requirements": ["openrouteservice==2.3.3"],
-  "version": "0.0.2"
+  "version": "0.1.0"
 }
