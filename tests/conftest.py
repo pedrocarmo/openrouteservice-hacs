@@ -22,24 +22,55 @@ def mock_ors_client():
             ]
         }
 
-        # Mock successful directions
+        # Mock successful directions (GeoJSON FeatureCollection format)
         client_instance.directions.return_value = {
-            "routes": [
+            "type": "FeatureCollection",
+            "bbox": [-8.973121, 38.701823, -8.944642, 38.73037],
+            "features": [
                 {
-                    "summary": {
-                        "distance": 5420.5,
-                        "duration": 720.3
-                    },
-                    "geometry": "test_encoded_polyline",
-                    "segments": [
-                        {
+                    "type": "Feature",
+                    "bbox": [-8.973121, 38.701823, -8.944642, 38.73037],
+                    "properties": {
+                        "summary": {
                             "distance": 5420.5,
-                            "duration": 720.3,
-                            "steps": []
-                        }
-                    ]
+                            "duration": 720.3
+                        },
+                        "segments": [
+                            {
+                                "distance": 5420.5,
+                                "duration": 720.3,
+                                "steps": [
+                                    {
+                                        "distance": 241.4,
+                                        "duration": 22.8,
+                                        "type": 11,
+                                        "instruction": "Head southeast",
+                                        "name": "Test Street",
+                                        "way_points": [0, 8]
+                                    }
+                                ]
+                            }
+                        ],
+                        "way_points": [0, 142]
+                    },
+                    "geometry": {
+                        "coordinates": [
+                            [13.388860, 52.517037],
+                            [13.397634, 52.529407]
+                        ],
+                        "type": "LineString"
+                    }
                 }
-            ]
+            ],
+            "metadata": {
+                "attribution": "openrouteservice.org | OpenStreetMap contributors",
+                "service": "routing",
+                "query": {
+                    "coordinates": [[13.388860, 52.517037], [13.397634, 52.529407]],
+                    "profile": "driving-car",
+                    "format": "geojson"
+                }
+            }
         }
 
         yield client_instance

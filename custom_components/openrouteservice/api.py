@@ -106,12 +106,19 @@ class OpenRouteServiceAPI:
 
             _LOGGER.debug("Directions API response keys: %s", result.keys())
 
-            if not result.get("routes"):
-                # Log the full response for debugging
-                _LOGGER.error("No routes in API response. Full response: %s", result)
+            # API returns GeoJSON FeatureCollection format
+            if not result.get("features") or len(result["features"]) == 0:
+                _LOGGER.error("No features in API response. Full response: %s", result)
                 raise ValueError("No route found between origin and destination")
 
-            route = result["routes"][0]
+            # Extract the route from the first feature
+            feature = result["features"][0]
+            route = {
+                "summary": feature["properties"]["summary"],
+                "geometry": feature.get("geometry"),
+                "segments": feature["properties"].get("segments", []),
+            }
+
             _LOGGER.info(
                 "Route calculated: %.2f km, %.2f min",
                 route["summary"]["distance"] / 1000,

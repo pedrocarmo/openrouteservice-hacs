@@ -102,7 +102,10 @@ async def test_get_directions_no_route_found(hass: HomeAssistant):
     with patch("custom_components.openrouteservice.api.openrouteservice.Client") as mock_client:
         client_instance = MagicMock()
         mock_client.return_value = client_instance
-        client_instance.directions.return_value = {"routes": []}
+        client_instance.directions.return_value = {
+            "type": "FeatureCollection",
+            "features": []
+        }
 
         api = OpenRouteServiceAPI(hass, "test_api_key")
         origin = (13.388860, 52.517037)
