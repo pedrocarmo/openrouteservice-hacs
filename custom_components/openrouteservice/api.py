@@ -107,11 +107,15 @@ class OpenRouteServiceAPI:
                 preference,
             )
 
+            _LOGGER.debug("Directions API response keys: %s", result.keys())
+
             if not result.get("routes"):
+                # Log the full response for debugging
+                _LOGGER.error("No routes in API response. Full response: %s", result)
                 raise ValueError("No route found between origin and destination")
 
             route = result["routes"][0]
-            _LOGGER.debug(
+            _LOGGER.info(
                 "Route calculated: %.2f km, %.2f min",
                 route["summary"]["distance"] / 1000,
                 route["summary"]["duration"] / 60,
@@ -119,8 +123,10 @@ class OpenRouteServiceAPI:
             return route
 
         except exceptions.ApiError as err:
+            _LOGGER.error("Directions API error: %s", err)
             raise CannotConnect(f"Directions API error: {err}") from err
         except exceptions.Timeout as err:
+            _LOGGER.error("Directions timeout: %s", err)
             raise CannotConnect("Directions timeout") from err
 
     def _directions_sync(
@@ -130,8 +136,16 @@ class OpenRouteServiceAPI:
         preference: str,
     ) -> dict[str, Any]:
         """Synchronous directions helper."""
+        # Convert tuples to lists for API compatibility
+        coords_list = [[coord[0], coord[1]] for coord in coords]
+        _LOGGER.debug(
+            "Requesting directions with coords: %s, profile: %s, preference: %s",
+            coords_list,
+            profile,
+            preference,
+        )
         return self._client.directions(
-            coords,
+            coords_list,
             profile=profile,
             format="geojson",
             preference=preference,

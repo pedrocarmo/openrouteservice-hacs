@@ -67,23 +67,34 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
             try:
                 # Step 1: Geocode origin
                 _LOGGER.debug("Geocoding origin: %s", origin_address)
-                origin_coords = await api_client.geocode_address(origin_address)
+                try:
+                    origin_coords = await api_client.geocode_address(origin_address)
+                    _LOGGER.info("Origin geocoded to: %s", origin_coords)
+                except ValueError as err:
+                    raise HomeAssistantError(f"Failed to geocode origin '{origin_address}': {err}") from err
 
                 # Step 2: Geocode destination
                 _LOGGER.debug("Geocoding destination: %s", destination_address)
-                dest_coords = await api_client.geocode_address(destination_address)
+                try:
+                    dest_coords = await api_client.geocode_address(destination_address)
+                    _LOGGER.info("Destination geocoded to: %s", dest_coords)
+                except ValueError as err:
+                    raise HomeAssistantError(f"Failed to geocode destination '{destination_address}': {err}") from err
 
                 # Step 3: Get directions
-                _LOGGER.debug(
+                _LOGGER.info(
                     "Calculating route from %s to %s (profile: %s, preference: %s)",
                     origin_coords,
                     dest_coords,
                     profile,
                     preference,
                 )
-                route = await api_client.get_directions(
-                    origin_coords, dest_coords, profile, preference
-                )
+                try:
+                    route = await api_client.get_directions(
+                        origin_coords, dest_coords, profile, preference
+                    )
+                except ValueError as err:
+                    raise HomeAssistantError(f"Route calculation failed: {err}") from err
 
                 # Return response data if requested
                 if call.return_response:
@@ -106,8 +117,9 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
                 return None
 
-            except ValueError as err:
-                raise HomeAssistantError(f"Geocoding failed: {err}") from err
+            except HomeAssistantError:
+                # Re-raise our own errors
+                raise
             except CannotConnect as err:
                 raise HomeAssistantError(f"API error: {err}") from err
             except Exception as err:
