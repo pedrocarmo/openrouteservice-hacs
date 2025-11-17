@@ -85,6 +85,8 @@ class OpenRouteServiceAPI:
         origin: tuple[float, float],
         destination: tuple[float, float],
         profile: str = "driving-car",
+        units: str = "m",
+        language: str = "en",
     ) -> dict[str, Any]:
         """
         Get directions between two coordinates.
@@ -93,6 +95,8 @@ class OpenRouteServiceAPI:
             origin: (longitude, latitude) tuple
             destination: (longitude, latitude) tuple
             profile: Transportation mode
+            units: Distance units (m, km, mi)
+            language: Language for instructions
 
         Returns:
             Route information with distance, duration, geometry, etc.
@@ -102,6 +106,8 @@ class OpenRouteServiceAPI:
                 self._directions_sync,
                 [origin, destination],
                 profile,
+                units,
+                language,
             )
 
             _LOGGER.debug("Directions API response keys: %s", result.keys())
@@ -120,8 +126,9 @@ class OpenRouteServiceAPI:
             }
 
             _LOGGER.info(
-                "Route calculated: %.2f km, %.2f min",
-                route["summary"]["distance"] / 1000,
+                "Route calculated: %.2f %s, %.2f min",
+                route["summary"]["distance"] / 1000 if units == "m" else route["summary"]["distance"],
+                units,
                 route["summary"]["duration"] / 60,
             )
             return route
@@ -137,20 +144,25 @@ class OpenRouteServiceAPI:
         self,
         coords: list[tuple[float, float]],
         profile: str,
+        units: str,
+        language: str,
     ) -> dict[str, Any]:
         """Synchronous directions helper."""
         # Convert tuples to lists for API compatibility
         coords_list = [[coord[0], coord[1]] for coord in coords]
         _LOGGER.debug(
-            "Requesting directions with coords: %s, profile: %s",
+            "Requesting directions with coords: %s, profile: %s, units: %s, language: %s",
             coords_list,
             profile,
+            units,
+            language,
         )
         return self._client.directions(
             coords_list,
             profile=profile,
             format="geojson",
-            units="m",
+            units=units,
+            language=language,
             geometry=True,
             instructions=True,
         )

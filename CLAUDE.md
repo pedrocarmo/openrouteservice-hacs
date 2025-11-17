@@ -250,3 +250,4 @@ Should be documented in README and noted during config flow.
 Remember:
 - Never copy the api key to another file, it needs to stay in the env and not be exposed in the repo
 - When creating a new version, remember to check usual files that have the latest version (manifest, hacs.json) and update them before the version is tagged
+- Always check if the ARCHITECTURE.md file needs to be updated when making changes

@@ -31,3 +31,22 @@ plan_route:
   response:
     optional: true
     description: Route information including distance, duration, and geometry
+
+clear_cache:
+  name: Clear cache
+  description: Manually clear geocoding and/or route caches. Useful for freeing up space or forcing fresh API calls.
+  fields:
+    cache_type:
+      name: Cache type
+      description: Which cache to clear.
+      default: "all"
+      required: true
+      selector:
+        select:
+          options:
+            - label: "All caches"
+              value: "all"
+            - label: "Geocoding cache only"
+              value: "geocoding"
+            - label: "Route cache only"
+              value: "routes"
