@@ -17,5 +17,62 @@
     "abort": {
       "already_configured": "This API key is already configured."
     }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "OpenRouteService Options",
+        "description": "Configure caching behavior, units, and language preferences.",
+        "data": {
+          "geocoding_cache_days": "Geocoding cache duration (days)",
+          "route_cache_days": "Route cache duration (days)",
+          "units": "Distance units",
+          "language": "Route instruction language"
+        },
+        "data_description": {
+          "geocoding_cache_days": "How long to cache geocoded addresses (0 to disable caching)",
+          "route_cache_days": "How long to cache calculated routes (0 to disable caching)",
+          "units": "Units for distance measurements (m=meters, km=kilometers, mi=miles)",
+          "language": "Language for turn-by-turn instructions (select 'custom' to enter a specific code)"
+        }
+      },
+      "custom_language": {
+        "title": "Custom Language Code",
+        "description": "Enter a custom language code (e.g., 'sv' for Swedish, 'pl' for Polish)",
+        "data": {
+          "custom_language_code": "Language Code"
+        }
+      }
+    }
+  },
+  "services": {
+    "plan_route": {
+      "name": "Plan route",
+      "description": "Plan a route between two addresses.",
+      "fields": {
+        "origin": {
+          "name": "Origin",
+          "description": "Starting address or coordinates."
+        },
+        "destination": {
+          "name": "Destination",
+          "description": "Destination address or coordinates."
+        },
+        "profile": {
+          "name": "Travel mode",
+          "description": "Transportation mode for routing."
+        }
+      }
+    },
+    "clear_cache": {
+      "name": "Clear cache",
+      "description": "Clear geocoding and/or route caches.",
+      "fields": {
+        "cache_type": {
+          "name": "Cache type",
+          "description": "Which cache to clear (geocoding, routes, or all)."
+        }
+      }
+    }
   }
 }
